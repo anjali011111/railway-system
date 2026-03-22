@@ -8,19 +8,19 @@
 
 const mysql = require('mysql2');
 
-// createPool keeps a set of connections ready (better than
-// creating a new connection on every request)
+// When running on Railway, it provides database credentials
+// as environment variables automatically.
+// When running locally, it falls back to your local MySQL settings.
 const pool = mysql.createPool({
-  host:     'localhost',   // Where MySQL is running (your own PC)
-  user:     'root',        // MySQL username (default: root)
-  password: '',            // ← PUT YOUR MySQL PASSWORD HERE
-  database: 'railway_db', // The database name from schema.sql
+  host:     process.env.MYSQLHOST     || 'localhost',
+  user:     process.env.MYSQLUSER     || 'root',
+  password: process.env.MYSQLPASSWORD || '',
+  database: process.env.MYSQLDATABASE || 'railway_db',
+  port:     process.env.MYSQLPORT     || 3306,
   waitForConnections: true,
   connectionLimit:    10,
   queueLimit:         0
 });
 
-// .promise() lets us use async/await instead of callbacks
 const db = pool.promise();
-
 module.exports = db;

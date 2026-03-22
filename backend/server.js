@@ -15,7 +15,7 @@ const passengerRoutes = require('./routes/passengers');
 const ticketRoutes    = require('./routes/tickets');
 
 const app  = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ── MIDDLEWARE ────────────────────────────────────────────────
 // Middleware = code that runs on EVERY request before the route handler
@@ -31,7 +31,7 @@ app.use(express.json());
 // ── SERVE FRONTEND ────────────────────────────────────────────
 // This line tells Express: "if someone visits http://localhost:3000,
 // serve the HTML file from the frontend folder"
-app.use(express.static('../frontend'));
+app.use(express.static(require('path').join(__dirname, '../frontend')));
 
 // ── ROUTES ───────────────────────────────────────────────────
 // All train  endpoints  → /api/trains/...
@@ -50,5 +50,5 @@ app.get('/api', (req, res) => {
 // ── START SERVER ──────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`✅  Railway backend running at http://localhost:${PORT}`);
-  console.log(`📄  Open your browser at    http://localhost:${PORT}`);
+  console.log(`📄  Environment: ${process.env.NODE_ENV || 'development'}`);
 });
