@@ -8,19 +8,27 @@
 
 const mysql = require('mysql2');
 
-// When running on Railway, it provides database credentials
-// as environment variables automatically.
-// When running locally, it falls back to your local MySQL settings.
 const pool = mysql.createPool({
-  host:     process.env.MYSQLHOST     || 'localhost',
-  user:     process.env.MYSQLUSER     || 'root',
-  password: process.env.MYSQLPASSWORD || '',
-  database: process.env.MYSQLDATABASE || 'railway_db',
-  port:     process.env.MYSQLPORT     || 3306,
+  host:     process.env.MYSQLHOST     || process.env.DB_HOST     || 'localhost',
+  user:     process.env.MYSQLUSER     || process.env.DB_USER     || 'root',
+  password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+  database: process.env.MYSQLDATABASE || process.env.DB_NAME     || 'railway_db',
+  port: parseInt(process.env.MYSQLPORT || process.env.DB_PORT || '3306'),
   waitForConnections: true,
   connectionLimit:    10,
-  queueLimit:         0
+  queueLimit:         0,
+  connectTimeout:     30000,
+  acquireTimeout:     30000,
+  ssl: process.env.MYSQLHOST && process.env.MYSQLHOST !== 'localhost'
+    ? { rejectUnauthorized: false }
+    : false
 });
 
 const db = pool.promise();
+
+// Test connection on startup
+db.query('SELECT 1')
+  .then(() => console.log('✅ Database connected successfully!'))
+  .catch(err => console.error('⚠️ Database connection error:', err.message));
+
 module.exports = db;
