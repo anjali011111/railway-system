@@ -8,7 +8,7 @@
 
 const express = require('express');
 const router  = express.Router();
-const db      = require('../db');   // import our DB connection
+const db      = require('../db');
 
 // ── GET ALL TRAINS ──────────────────────────────────────────
 // When frontend calls: fetch('/api/trains')
