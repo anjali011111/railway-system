@@ -1476,7 +1476,9 @@ function makeLamps(){
 }
 
 // ═══ API ═══
-const API = "https://railway-system-2.onrender.com"; 
+// API base is empty — all fetch() calls use relative paths so
+// they always hit whichever server is serving this HTML file.
+const API = "";
 let STATE={trains:[],passengers:[],tickets:[],logs:[]};
 
 function getPassenger(id){return STATE.passengers.find(p=>p.passenger_id===id);}
