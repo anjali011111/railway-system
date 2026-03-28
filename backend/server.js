@@ -29,9 +29,9 @@ app.use(cors());
 app.use(express.json());
 
 // ── SERVE FRONTEND ────────────────────────────────────────────
-// This line tells Express: "if someone visits http://localhost:3000,
-// serve the HTML file from the frontend folder"
-app.use(express.static(require('path').join(__dirname, '../frontend')));
+// index.html lives at the repo root (one level above backend/).
+// express.static serves it and any other assets from that folder.
+app.use(express.static(require('path').join(__dirname, '..')));
 
 // ── ROUTES ───────────────────────────────────────────────────
 // All train  endpoints  → /api/trains/...
